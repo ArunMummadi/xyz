@@ -1,0 +1,34 @@
+create and load the data from bigquery public dataset  covid19_covidtracking.summary---
+
+create table if not exists america_data.stage_table as select * FROM bigquery-public-data.covid19_covidtracking.summary
+
+create partition table----
+CREATE TABLE america_data.stage_partition(
+    date DATE,					
+admin_level_1 STRING,
+state STRING,					
+tests_increase INTEGER,					
+tests_total INTEGER,					
+tests_pending INTEGER,					
+cases_positive_increase INTEGER,					
+cases_positive_total INTEGER,				
+cases_negative_increase INTEGER,				
+cases_negative_total INTEGER,				
+deaths_increase INTEGER,		
+deaths_total INTEGER,				
+recovered_total INTEGER,				
+hospitilzations_current INTEGER,			
+hospitalizations_increase INTEGER,				
+hospitalizations_total INTEGER,			
+icu_current INTEGER,					
+icu_total INTEGER,				
+ventilator_current INTEGER,					
+ventilator_total INTEGER,					
+last_checked_ts TIMESTAMP					
+
+  )
+  PARTITION BY date_trunc(last_checked_ts, day) cluster by state
+  
+  select * from america_data.stage_partition where date='2021-02-02'
+  
+  select * from `america_data.stage_table` where date='2021-02-02'
